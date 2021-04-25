@@ -4,58 +4,59 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Planetary</title>
+    <link rel="stylesheet" href="/my-game-site/css/style.css">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <!--monserat bold 700-->
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700&display=swap" rel="stylesheet">
+    <!--monserat reggular 400-->
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
 </head>
 <body>
-    <canvas id="canvas" width="500" height="600">ff</canvas>
-    <script>
-        var sun = new Image();
-        var moon = new Image();
-        var earth = new Image();
-        function init(){
-        sun.src = 'https://mdn.mozillademos.org/files/1456/Canvas_sun.png';
-        moon.src = 'https://mdn.mozillademos.org/files/1443/Canvas_moon.png';
-        earth.src = 'https://mdn.mozillademos.org/files/1429/Canvas_earth.png';
-        window.requestAnimationFrame(draw);
-        }
+    <header>
+        <div class="dws-menu">
+            <ul class="dws-ul">
+                <li class="dws-li">
+                    <a href="/index.html">Головна</a>
 
-        function draw() {
-        var ctx = document.getElementById('canvas').getContext('2d');
+                </li>
+                <li class="dws-li">
+                    <a href="/my-game-site/news.html">Новини</a>
+                </li>
+                <li class="dws-li">
+                    <a href="/my-game-site/games.html">Ігри</a>
 
-        ctx.globalCompositeOperation = 'destination-over';
-        ctx.clearRect(0,0,300,300); // clear canvas
+                </li>
+                <li class="dws-li">
+                    <a href="/my-game-site/sign-in.html">Ввійти</a>
 
-        ctx.fillStyle = 'rgba(0,0,0,0.4)';
-        ctx.strokeStyle = 'rgba(0,153,255,0.4)';
-        ctx.save();
-        ctx.translate(150,150);
+                </li>
 
-        // Earth
-        var time = new Date();
-        ctx.rotate( ((2*Math.PI)/60)*time.getSeconds() + ((2*Math.PI)/60000)*time.getMilliseconds() );
-        ctx.translate(105,0);
-        ctx.fillRect(0,-12,50,24); // Shadow
-        ctx.drawImage(earth,-12,-12);
-
-        // Moon
-        ctx.save();
-        ctx.rotate( ((2*Math.PI)/6)*time.getSeconds() + ((2*Math.PI)/6000)*time.getMilliseconds() );
-        ctx.translate(0,28.5);
-        ctx.drawImage(moon,-3.5,-3.5);
-        ctx.restore();
-
-        ctx.restore();
-
-        ctx.beginPath();
-        ctx.arc(150,150,105,0,Math.PI*2,false); // Earth orbit
-        ctx.stroke();
-
-        ctx.drawImage(sun,0,0,300,300);
-
-        window.requestAnimationFrame(draw);
-        }
-
-        init();
+            </ul>
+        </div>
+    </header>
+    <div class="main-container">
+        <div>
+            <h3>Something goes wrong</h3>
+            <p>
+                Lorem ipsum dolor sit amet consectetur adipisicing elit. Cum hic dignissimos praesentium blanditiis
+                fugit ratione impedit quibusdam eius veritatis dolorem reprehenderit dolore
+                mollitia velit quisquam deserunt, nesciunt nobis magnam iste?
+            </p>
+    
+        </div>
+        <div>
+            <canvas id="canvas" width="600" height="600" >ff</canvas>
+        </div>
+    </div>
+    <footer>
+        <div class="footer-container">
+            <h3 text-align = "center" >Copirat by evgen1sider</h3> 
+        </div>
+    </footer>
+    
+    <script type="text/javascript" src="/my-game-site/js/canvas.js">
     </script>
 </body>
 </html>

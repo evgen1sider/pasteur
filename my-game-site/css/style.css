@@ -1,6 +1,6 @@
 body {
   font-family: "Montserrat", sans-serif;
-  background: url(/my-game-site/image/dark-honeycomb/dark-honeycomb.png) ;
+  background: url(/my-game-site/image/gaming-pattern/gaming-pattern.png) ;
 }
 .dws-menu {
   margin-top: 100px;
@@ -19,7 +19,7 @@ li.dws-li {
 }
 li.dws-li a {
   text-decoration: none;
-  color: rgb(240, 232, 232);
+  color: rgb(10, 10, 10);
   position: relative;
   
 }
@@ -27,7 +27,7 @@ li.dws-li a::before {
   content: "";
   width: 100%;
   height: 5px;
-  background-color: rgb(240, 232, 232);
+  background-color: rgb(17, 15, 15);
   position: absolute;
   top: 100%;
 }
@@ -50,7 +50,7 @@ div.main-container {
   left: 40px;
   top: 40px;
 
-  background: #ffffffe8;
+  background: #fffffff6;
   box-shadow: 6px 6px 20px rgba(240, 237, 237, 0.856);
   margin: 0 auto;
 }
