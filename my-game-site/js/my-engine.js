@@ -1,13 +1,14 @@
 // MyEngineJS - New Game Engine
 
-let MyEngineJS = function (_canvas) {
+var MyEngineJS = function (_box, _layers) {
     'use strict'
-    let MyEngineJS = this;
+    var MyEngineJS = this;
 
     // Globals //
-    var canvas = null;
+    //var canvas = null;
     var size = null;
-    var context = null;
+    var layer = null;
+    //var context = null;
     var canvas_offset = null;
     // Global flags //
     var running = false;
@@ -15,16 +16,29 @@ let MyEngineJS = function (_canvas) {
 
     // Initial //
     var _INIT = function () {
-        if (typeof _canvas !== 'object')
-            canvas = document.getElementById(_canvas);
-        else
-            canvas = _canvas;
-        context = canvas.getContext('2d');
-        size = vector2(canvas.width, canvas.height);
+        if (typeof _box !== 'object')
+            _box = document.getElementById(_box);
+        
+        
+        
+        
+        var box = _box.getBoundingClientRect();
+        canvas_offset = vector2(box.left, box.top);
+        size = vector2(box.width, box.height);
+        
+        if (typeof _layers === 'object') {
+            var i, j = 0;
+            for (i in _layers) {
+                MyEngineJS.create_layer(i, j, _layers[i].auto_clear);
+                j++;
 
-        var pos = canvas.getBoundingClientRect();
-        canvas_offset = vector2(pos.left, pos.right);
-        context.fillText('Hy There', 100, 100)
+            }
+
+        } else {
+            MyEngineJS.create_layer('main', 0, true);
+            MyEngineJS.select_layer('main');
+        }
+
         
 
                 
@@ -33,6 +47,50 @@ let MyEngineJS = function (_canvas) {
     // Math //
     var int = function (num) {
         return isNumber(num) ? num : 0;
+    }
+
+
+    // слої
+    var layers = {};
+    var clear_layers = [];
+    class Layer {
+        constructor(index) {
+            var cnv = document.createElement('canvas');
+            cnv.style.cssText = 'position: absolute; left: ' + canvas_offset.x + 'px; top: ' + canvas_offset.y + 'px;';
+            cnv.width = size.x;
+            cnv.height = size.y;
+            cnv.style.zIndex = 100 + index;
+            document.body.appendChild(cnv);
+            
+            this.canvas = cnv;
+            this.ctx = cnv.getContext('2d');
+        }
+
+        clear() {
+            this.ctx.clearRect(0, 0, size.x, size.y);
+        }
+
+        draw_rect(p) {
+            this.ctx.fillStyle = p.color;
+            this.ctx.fillRect(p.x, p.y, p.width, p.height);
+        }
+    }
+    MyEngineJS.create_layer = function (id, index, is_auto_clear) {
+        if (layers[id]) return;
+        layers[id] = new Layer(index);
+        if (is_auto_clear) clear_layers.push(layers[id]);
+    }
+
+    MyEngineJS.select_layer = function (id) {
+        if (!layers[id]) return;
+        layer = layers[id];
+        
+        
+    }
+
+    MyEngineJS.get_layer = function (id) {
+        if (!layers[id]) return;
+        return layers[id];
     }
 
     // vectors
@@ -49,14 +107,20 @@ let MyEngineJS = function (_canvas) {
 
     
 
-    let vector2 = this.vector2 = function (x, y) {
+    var vector2 = this.vector2 = function (x, y) {
         return new Vector2(x, y);
     };
-    //engine 
+    // ENGINE //
 
-    let _update = function () {
+    var _update = function () {
 
         active_scene.update();
+
+        var i = clear_layers.length - 1;
+        for (; i >= 0; i--){
+            clear_layers[i].clear();
+        }
+
         active_scene.draw_nodes();
         active_scene.draw();
 
@@ -127,6 +191,7 @@ let MyEngineJS = function (_canvas) {
             this.position = p.position;
             this.size = p.size;
             this.type = 'Node';
+            this.layer = p.layer || 'main';
         }
         move(p) {
             this.position.plus(p);
@@ -141,9 +206,15 @@ let MyEngineJS = function (_canvas) {
             
         }
         draw() {
-            context.clearRect(0, 0, size.x, size.y);
-            context.fillStyle = this.color;
-            context.fillRect(this.position.x, this.position.y, this.size.x, this.size.y)
+            layers[this.layer].draw_rect({
+                x : this.position.x,
+                y : this.position.y,
+                width : this.size.x,
+                height : this.size.y,
+                color : this.color
+
+            })
+            
         }
 
     }

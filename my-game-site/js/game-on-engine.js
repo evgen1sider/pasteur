@@ -1,6 +1,17 @@
 // Examples
 
-let mejs = new MyEngineJS('engine-canvas');
+var mejs = new MyEngineJS('my-game', {
+    
+    back: {
+        'auto_clear' : false
+    },
+
+    main: {
+        'auto_clear' : true
+    }
+});
+
+
 
 mejs.create_scene('my_scene',function () {
 
@@ -8,13 +19,21 @@ mejs.create_scene('my_scene',function () {
         type: 'rectangle',
         position: mejs.vector2(50, 50),
         size: mejs.vector2(100, 100),
-        color: 'blue'
+        color: 'blue',
+        layer: 'main'
 
     });
     
     // Визветься тоді коли буде загружена або перехід на сцену
     this.init = function () {
-        console.log('init');
+        console.log('inited');
+
+        mejs.get_layer('back').draw_rect({
+            x: 10, y: 10,
+            width: 500, height: 300,
+            color: '#402727'
+        });
+        
         
     };
     // dt - delta time
