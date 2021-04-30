@@ -14,6 +14,14 @@ var MyEngineJS = function (_box, _layers) {
     var running = false;
     var active_scene = null;
 
+    // CONFIGURATION //
+    var config = {
+        font_size: 50,
+        font_name: 'serif',
+        //властивість яка відповідає за вирівнювання
+        font_base_line: 'top'
+    }
+
     // Initial //
     var _INIT = function () {
         if (typeof _box !== 'object')
@@ -50,7 +58,7 @@ var MyEngineJS = function (_box, _layers) {
     }
 
 
-    // слої
+    // слої LAYERS //
     var layers = {};
     var clear_layers = [];
     class Layer {
@@ -71,9 +79,58 @@ var MyEngineJS = function (_box, _layers) {
         }
 
         draw_rect(p) {
-            this.ctx.fillStyle = p.color;
-            this.ctx.fillRect(p.x, p.y, p.width, p.height);
+            var dp = vp(p.x, p.y);
+            if (p.color) {
+                this.ctx.fillStyle = p.color;
+                this.ctx.fillRect(dp.x, dp.y, p.width, p.height);
+            }
+            
+            
+
+            if (p.border) {
+                this.ctx.strokeStyle = p.border;
+                this.ctx.strokeRect(dp.x, dp.y, p.width, p.height);
+                
+            }
         }
+
+        draw_circle(p) {
+            var dp = vp(p.x, p.y);
+
+            //this.ctx.fillStyle = p.color;
+            
+            this.ctx.beginPath();
+            this.ctx.arc(dp.x + p.radius, dp.y + p.radius, p.radius, 0, 2 * Math.PI, false);
+            //this.ctx.fill();
+
+            if (p.color) {
+                this.ctx.fillStyle = p.color;
+                this.ctx.fill();
+            }
+            
+
+            if (p.border) {
+                this.ctx.strokeStyle = p.border;
+                this.ctx.stroke();
+                
+                
+            }
+        }
+
+        draw_text(p) {
+
+            if (p.font || p.size) 
+                this.ctx.font =(p.size || config.font_size) +  'px '+ (p.font || config.font_name);
+            
+            this.ctx.textBaseline = config.font_base_line;
+            
+            if (p.color) {
+                this.ctx.fillStyle = p.color;
+                this.ctx.fillText(p.text, p.x, p.y);
+            }
+        }
+        
+
     }
     MyEngineJS.create_layer = function (id, index, is_auto_clear) {
         if (layers[id]) return;
@@ -102,6 +159,12 @@ var MyEngineJS = function (_box, _layers) {
         plus(p) {
             this.x += p.x;
             this.y += p.y;
+            return this;
+        }
+        minus(v) {
+            this.x -= v.x;
+            this.y -= v.y;
+            return this;
         }
     };
 
@@ -113,7 +176,8 @@ var MyEngineJS = function (_box, _layers) {
     // ENGINE //
 
     var _update = function () {
-
+        
+        active_scene.update_nodes();
         active_scene.update();
 
         var i = clear_layers.length - 1;
@@ -135,16 +199,31 @@ var MyEngineJS = function (_box, _layers) {
         }
         
     }
-    //scenes
+    //scenes//
     let scenes = {};
 
     class Scene {
         constructor(scn) {
             this.scene = scn;
+            this.count_nodes = 0;
+            
         }
         init() {
             this.scene.init();
+            //var count_nodes = this.scene.nodes.length;
         }
+
+        update_nodes() {
+            var i = 0;
+            let len = this.scene.nodes.length;
+            
+            for (; i < len; i++) {
+                if (typeof this.scene.nodes[i].draw !== 'undefined') {
+                    this.scene.nodes[i].update();
+                }
+            }
+        }
+
         update() {
             this.scene.update();
         }
@@ -156,7 +235,8 @@ var MyEngineJS = function (_box, _layers) {
         }
         draw_nodes() {
             var i = 0;
-            var len = this.scene.nodes.length;
+            let len = this.scene.nodes.length;
+            
             for (; i < len; i++) {
                 if (typeof this.scene.nodes[i].draw !== 'undefined') {
                     this.scene.nodes[i].draw();
@@ -167,6 +247,7 @@ var MyEngineJS = function (_box, _layers) {
 
     this.create_scene = function (name, Construct) {
         //  array of nodes
+        if (scenes[name]) return;
         scenes[name] = new Scene(new Construct());
 
     }
@@ -192,11 +273,32 @@ var MyEngineJS = function (_box, _layers) {
             this.size = p.size;
             this.type = 'Node';
             this.layer = p.layer || 'main';
+            
         }
         move(p) {
             this.position.plus(p);
         }
-    }
+        draw_box(color) {
+            layers[this.layer].draw_rect({
+                x: this.position.x,
+                y: this.position.y,
+                width: this.size.x,
+                height: this.size.y,
+                border: color || 'red'
+
+            });
+
+            layers[this.layer].draw_text({
+                x: this.position.x + this.size.x,
+                y: this.position.y+ this.size.y,
+                text: this.size.x + ' x ' + this.size.y,
+                size: 40,
+                color: 'green'
+            });
+
+        }
+    };
+    // rectangle
     class RectNode extends Node {
         constructor(p) {
             super(p);
@@ -211,21 +313,58 @@ var MyEngineJS = function (_box, _layers) {
                 y : this.position.y,
                 width : this.size.x,
                 height : this.size.y,
-                color : this.color
+                color: this.color
+                
 
             })
+            log(1);
+            
+        }
+
+    }
+    // circle
+
+    class CircleNode extends Node {
+        constructor(p) {
+            super(p);
+            this.type = 'CircleNode';
+            this.color = p.color;
+            this.radius = p.radius;
+            this.size = vector2();
+
+            
+        }
+
+        update() {
+            this.size.x = this.size.y = this.radius * 2;
+            log(1);
+            
+            
+            
+        }
+
+        draw() {
+            layers[this.layer].draw_circle({
+                x: this.position.x,
+                y: this.position.y,
+                radius: this.radius,
+                color: this.color
+
+            });
             
         }
 
     }
     // p - like param
-    let create_node = function (p) {
+    var create_node = function (p) {
         if (p.type === 'rectangle')
             return new RectNode(p);
+        else if (p.type === 'circle')
+            return new CircleNode(p);
     }
 
     
-    this.create_node = function (scene, params) {
+    MyEngineJS.create_node = function (scene, params) {
         if (typeof scene.nodes === 'undefined') {
             var nds = scene.nodes = [];
         }
@@ -234,6 +373,20 @@ var MyEngineJS = function (_box, _layers) {
         nds.push(n);
         return n;
 
+    };
+
+    // viewPort - камера //
+    var view = MyEngineJS.view = new function () {
+        this.position = vector2();
+        this.scale = vector2(1, 1);
+
+        this.move = function (v) {
+            this.position.plus(v);
+        }
+        
+    };
+    var vp = function (x, y) {
+        return vector2(x, y).minus(view.position);
     };
 
 
