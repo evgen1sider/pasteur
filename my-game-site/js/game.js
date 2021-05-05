@@ -4,7 +4,7 @@ let canv = document.getElementById('canvas');
 let ctx = canv.getContext('2d');
 
 canv.width = 640;
-canv.height = 640;
+canv.height = 400;
 
 ctx.strokeStyle = '#B70A02'; // меняем цвет рамки
 ctx.strokeRect(15, 15, 266, 266);
@@ -64,16 +64,26 @@ ctx.fillRect(cellSize, cellSize, 13 * cellSize, 13 * cellSize)
 // Цикл обрабатывающий массив в котором содержатся значения элементов карты
 // если попадается 1 то рисуется кирпичный блок
 // если 2, то бетонная стена
-for (var j = 0; j < 26; j++)
-for (var i = 0; i < 26; i++) {
-    switch (map[j][i]) {
-        case 1:
-            DrawBrick(i * cellSize / 2 + cellSize, j * cellSize / 2 + cellSize);
-            break;
-        case 2:
-            DrawHardBrick(i * cellSize / 2 + cellSize, j * cellSize / 2 + cellSize);
-            break;
-    }
+for (var j = 0; j < 26; j++) 
+    
+    for (var i = 0; i < 26; i++) {
+
+    
+        switch (map[j][i]) {
+        
+            case 1:
+            
+                DrawBrick(i * cellSize / 2 + cellSize, j * cellSize / 2 + cellSize);
+            
+                break;
+        
+            case 2:
+            
+                DrawHardBrick(i * cellSize / 2 + cellSize, j * cellSize / 2 + cellSize);
+            
+                break;
+        }
+        
 
 }
 

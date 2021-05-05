@@ -63,7 +63,7 @@ mejs.create_scene('my_scene',function () {
         //rect.move(mejs.vector2(1, 0))
         
         //mejs.view.move(mejs.vector2(-1, 1))
-        rect.radius += 0.1;
+        rect.radius += 0.01;
         
 
         
