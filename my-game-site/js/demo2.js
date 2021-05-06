@@ -2,7 +2,7 @@
 
 var contex = null;
 var tileWidth = 40, tileHeight = 40;
-var mapWidth = 10, mapHeight = 10;
+var mapWidth = 20, mapHeight = 20;
 
 var currentSecond = 0, frameCount = 0, framesLastSecond = 0;
 var LastFrameTime = 0;
@@ -17,18 +17,69 @@ var keysDown = {
 var player = new Character();
 
 var gameMap = [
-    0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-    0, 1, 0, 0, 1, 1, 1, 0, 0, 0,
-    0, 1, 1, 1, 1, 0, 1, 1, 0, 0,
-    0, 1, 0, 0, 0, 0, 0, 1, 1, 0,
-    0, 1, 1, 1, 0, 0, 0, 0, 1, 0,
-    0, 1, 0, 1, 0, 0, 1, 0, 0, 0,
-    0, 0, 0, 1, 1, 1, 1, 0, 0, 0,
-    0, 0, 0, 0, 1, 0, 0, 0, 0, 0,
-    0, 0, 1, 0, 1, 1, 1, 1, 1, 0,
-    0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 1, 0, 0, 1, 1, 1, 0, 0, 0, 0, 1, 0, 0, 1, 1, 1, 0, 0, 0,
+    0, 1, 1, 1, 1, 0, 1, 1, 0, 0, 0, 1, 0, 0, 1, 1, 1, 0, 0, 0,
+    0, 1, 0, 0, 0, 0, 0, 1, 1, 0, 0, 1, 0, 0, 1, 1, 1, 0, 0, 0,
+    0, 1, 1, 1, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 1, 1, 1, 0, 0, 0,
+    0, 1, 0, 1, 0, 0, 1, 1, 1, 0, 0, 1, 0, 0, 1, 1, 1, 0, 0, 0,
+    0, 1, 0, 1, 1, 1, 1, 0, 0, 0, 0, 1, 0, 0, 1, 1, 1, 1, 1, 0,
+    0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 1, 0, 1, 0,
+    0, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 1, 0,
+    0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1, 1, 1, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0,
+    0, 1, 0, 0, 1, 1, 1, 1, 0, 0, 0, 1, 0, 0, 1, 1, 1, 0, 0, 0,
+    0, 1, 1, 1, 1, 0, 1, 1, 0, 0, 0, 1, 0, 0, 1, 1, 1, 1, 1, 0,
+    0, 1, 0, 0, 0, 0, 0, 1, 1, 0, 0, 1, 0, 0, 1, 0, 1, 0, 1, 0,
+    0, 1, 1, 1, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 1, 1, 1, 0, 1, 0,
+    0, 1, 0, 1, 0, 0, 1, 1, 1, 0, 0, 1, 0, 0, 1, 0, 1, 1, 1, 0,
+    0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 1, 0, 0, 1, 1, 1, 0, 0, 0,
+    0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 1, 0, 0, 0,
+    0, 0, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 1, 1, 1, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,    
     
 ];
+// viewport - область огляду
+var viewport = {
+    screen: [0, 0],
+    startTile: [0, 0],
+    endTile: [0, 0],
+    // offset - зміщення
+    offset: [0, 0],
+    update: function (px, py)
+    {
+        this.offset[0] = Math.floor((this.screen[0] / 2) - px);
+        this.offset[1] = Math.floor((this.screen[1] / 2) - py);
+
+        var tile = [
+            Math.floor(px / tileWidth),
+            Math.floor(py/ tileHeight)
+        ];
+
+        this.startTile[0] = tile[0] - 1 -
+            Math.ceil((this.screen[0] / 2) / tileWidth);
+        this.startTile[1] = tile[1] - 1 -
+            Math.ceil((this.screen[1] / 2) / tileHeight);
+        
+        if (this.startTile[0] < 0) { this.startTile[0] = 0; }
+        if (this.startTile[1] < 0) { this.startTile[1] = 0; }
+        
+        this.endTile[0] = tile[0] + 1 +
+            Math.ceil((this.screen[0] / 2) / tileWidth);
+        this.endTile[1] = tile[1] + 1 +
+            Math.ceil((this.screen[1] / 2) / tileHeight);
+        if (this.endTile[0] >= mapWidth) { this.endTile[0] = mapWidth-1; }
+        if (this.endTile[1] >= mapHeight) { this.endTile[1] = mapHeight - 1; }
+        
+        
+        
+        
+        
+    }
+
+    
+
+}
 
 function Character() {
     this.tileFrom = [1, 1];
@@ -114,6 +165,11 @@ window.onload = function () {
         }
         console.log(e.keyCode)
     });
+    // розмір камери
+    viewport.screen = [
+        document.getElementById('canvas-demo2').width,
+        document.getElementById('canvas-demo2').height
+    ]
     
     
 };
@@ -171,10 +227,18 @@ function drawGame() {
         }
 
     }
+    //метод оновлення центрування камери
+    viewport.update(
+        player.position[0] + (player.dimensions[0] / 2),
+        player.position[1] + (player.dimensions[1] / 2)
+    );
+
+    contex.fillStyle = "#000000";
+    contex.fillRect(0, 0, viewport.screen[0], viewport.screen[1]);
     
-    for (var y = 0; y < mapHeight; y++)
+    for (var y = viewport.startTile[1]; y <= viewport.endTile[1]; y++)
     {
-        for (var x = 0; x < mapWidth; x++)
+        for (var x = viewport.startTile[0]; x <= viewport.endTile[0]; x++)
         {
             switch (gameMap[((y * mapWidth) + x)])
             {
@@ -185,15 +249,18 @@ function drawGame() {
                     contex.fillStyle = "#eeeeee";
             }
 
-            contex.fillRect(x * tileWidth, y * tileHeight, tileWidth, tileHeight);
+            contex.fillRect(viewport.offset[0] + x * tileWidth,
+                viewport.offset[1] + y * tileHeight, tileWidth, tileHeight);
         }
         
     }
 
     contex.fillStyle = "#0000ff";
-    contex.fillRect(player.position[0], player.position[1],
+    contex.fillRect(viewport.offset[0] + player.position[0],
+        viewport.offset[1] + player.position[1],
         player.dimensions[0], player.dimensions[1]
     );
+
 
 
 
