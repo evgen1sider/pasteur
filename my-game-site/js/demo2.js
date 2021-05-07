@@ -7,6 +7,7 @@ var mapWidth = 20, mapHeight = 20;
 var currentSecond = 0, frameCount = 0, framesLastSecond = 0;
 var LastFrameTime = 0;
 
+
 var keysDown = {
     37: false,
     38: false,
@@ -20,18 +21,18 @@ var gameMap = [
     0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
     0, 1, 0, 0, 1, 1, 1, 0, 0, 0, 0, 1, 0, 0, 1, 1, 1, 0, 0, 0,
     0, 1, 1, 1, 1, 0, 1, 1, 0, 0, 0, 1, 0, 0, 1, 1, 1, 0, 0, 0,
-    0, 1, 0, 0, 0, 0, 0, 1, 1, 0, 0, 1, 0, 0, 1, 1, 1, 0, 0, 0,
-    0, 1, 1, 1, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 1, 1, 1, 0, 0, 0,
-    0, 1, 0, 1, 0, 0, 1, 1, 1, 0, 0, 1, 0, 0, 1, 1, 1, 0, 0, 0,
-    0, 1, 0, 1, 1, 1, 1, 0, 0, 0, 0, 1, 0, 0, 1, 1, 1, 1, 1, 0,
-    0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 1, 0, 1, 0,
+    0, 1, 0, 0, 3, 0, 0, 1, 1, 0, 0, 1, 0, 0, 1, 1, 1, 0, 0, 0,
+    0, 1, 1, 1, 3, 0, 0, 0, 1, 0, 0, 1, 0, 0, 1, 1, 1, 0, 0, 0,
+    0, 1, 4, 1, 3, 0, 1, 1, 1, 0, 0, 1, 0, 0, 1, 1, 1, 0, 0, 0,
+    0, 1, 4, 1, 1, 1, 1, 0, 0, 0, 0, 1, 0, 0, 1, 1, 1, 1, 1, 0,
+    0, 1, 4, 0, 1, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 1, 0, 1, 0,
     0, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 1, 0,
     0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1, 1, 1, 0, 0, 0,
-    0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 1, 2, 2, 2, 1, 0, 0, 0, 0, 1, 0, 0, 0,
     0, 1, 0, 0, 1, 1, 1, 1, 0, 0, 0, 1, 0, 0, 1, 1, 1, 0, 0, 0,
     0, 1, 1, 1, 1, 0, 1, 1, 0, 0, 0, 1, 0, 0, 1, 1, 1, 1, 1, 0,
-    0, 1, 0, 0, 0, 0, 0, 1, 1, 0, 0, 1, 0, 0, 1, 0, 1, 0, 1, 0,
-    0, 1, 1, 1, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 1, 1, 1, 0, 1, 0,
+    0, 1, 0, 0, 2, 0, 0, 1, 1, 0, 0, 1, 0, 0, 1, 0, 1, 0, 1, 0,
+    0, 1, 1, 1, 2, 0, 0, 0, 1, 0, 0, 1, 0, 0, 1, 1, 1, 0, 1, 0,
     0, 1, 0, 1, 0, 0, 1, 1, 1, 0, 0, 1, 0, 0, 1, 0, 1, 1, 1, 0,
     0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 1, 0, 0, 1, 1, 1, 0, 0, 0,
     0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 1, 0, 0, 0,
@@ -39,6 +40,20 @@ var gameMap = [
     0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,    
     
 ];
+var floorTypes = {
+    solid: 0,
+    path: 1,
+    water: 2
+}
+
+var tileTypes = {
+    0: { colour: "#685b48", floor: floorTypes.solid },
+    1: { colour: "#5aa457", floor: floorTypes.path },
+    2: { colour: "#e8bd7a", floor: floorTypes.path },
+    3: { colour: "#286625", floor: floorTypes.solid },
+    4: { colour: "#678fd9", floor: floorTypes.water }
+    
+}
 // viewport - область огляду
 var viewport = {
     screen: [0, 0],
@@ -138,6 +153,25 @@ Character.prototype.processMovement = function (t) {
     return true;
 }
 
+
+Character.prototype.canMoveTo = function (x, y) {
+    if (x < 0 || x >= mapWidth || y < 0 || y >= mapHeight) { return false; }
+    if (tileTypes[gameMap[toIndex(x, y)]].floor != floorTypes.path) {return false; }
+    return true;
+}
+
+Character.prototype.canMoveUp = function () { return this.canMoveTo(this.tileFrom[0], this.tileFrom[1] - 1); }
+Character.prototype.canMoveDown = function () { return this.canMoveTo(this.tileFrom[0], this.tileFrom[1] + 1); }
+Character.prototype.canMoveLeft = function () { return this.canMoveTo(this.tileFrom[0] - 1, this.tileFrom[1]); }
+Character.prototype.canMoveRight = function () { return this.canMoveTo(this.tileFrom[0] + 1, this.tileFrom[1]); }
+
+Character.prototype.moveLeft = function (t) { this.tileTo[0] -= 1; this.timeMoved = t; };
+Character.prototype.moveRight = function (t) { this.tileTo[0] += 1; this.timeMoved = t };
+Character.prototype.moveUp = function (t) { this.tileTo[1] -= 1; this.timeMoved = t };
+Character.prototype.moveDown = function (t) { this.tileTo[1] += 1; this.timeMoved = t };
+
+
+
 function toIndex(x, y) {
     
     return ((y * mapWidth) + x);
@@ -190,32 +224,24 @@ function drawGame() {
     else { frameCount++; }
 
     if (!player.processMovement(curentFrameTime)) {
-        if (keysDown[38] && player.tileFrom[1] > 0 &&
-            gameMap[toIndex(player.tileFrom[0],
-                player.tileFrom[1] - 1)] == 1)
+        if (keysDown[38] && player.canMoveUp())
         {
-            player.tileTo[1] -= 1;
+            player.moveUp(curentFrameTime);
             
         }
-        else if (keysDown[40] && player.tileFrom[1] < (mapHeight - 1) &&
-            gameMap[toIndex(player.tileFrom[0],
-                player.tileFrom[1] + 1)] == 1)
+        else if (keysDown[40] && player.canMoveDown())
         {
-            player.tileTo[1] += 1;
+            player.moveDown(curentFrameTime);
             
         }
-        else if (keysDown[37] && player.tileFrom[0] > 0 &&
-            gameMap[toIndex(player.tileFrom[0] - 1,
-                player.tileFrom[1])] == 1)
+        else if (keysDown[37] && player.canMoveLeft())
         {
-            player.tileTo[0] -= 1;
+            player.moveLeft(curentFrameTime);
             
         }
-        else if (keysDown[39] && player.tileFrom[0] < (mapWidth - 1) &&
-            gameMap[toIndex(player.tileFrom[0]+1,
-                player.tileFrom[1])] == 1)
+        else if (keysDown[39] && player.canMoveRight())
         {
-            player.tileTo[0] += 1;
+            player.moveRight(curentFrameTime);
             
         }
         if (player.tileFrom[0] != player.tileTo[0] ||
@@ -240,14 +266,7 @@ function drawGame() {
     {
         for (var x = viewport.startTile[0]; x <= viewport.endTile[0]; x++)
         {
-            switch (gameMap[((y * mapWidth) + x)])
-            {
-                case 0:
-                    contex.fillStyle = "#999999";
-                    break;
-                default:
-                    contex.fillStyle = "#eeeeee";
-            }
+            contex.fillStyle = tileTypes[gameMap[toIndex(x, y)]].colour;
 
             contex.fillRect(viewport.offset[0] + x * tileWidth,
                 viewport.offset[1] + y * tileHeight, tileWidth, tileHeight);
