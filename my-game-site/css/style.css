@@ -56,8 +56,14 @@ div.main-container {
 
 
 }
+
+.news-links {
+  color: black;
+  font-weight: bold;
+}
 h3 {
   font-weight: bold;
+  margin: 32px;
 }
 div.footer-container {
   margin-top: 10px;
