@@ -40,8 +40,47 @@
     <div class="main-container">
         <div class="main-containe-block">
             <h2>Зареєструватись</h2>
-            C:\Users\evgen\OneDrive\Рабочий стол\my-game-site\pasteur\my-game-site
         </div>
+        <form action="http://localhost:3000/api" method="post">
+            <div class="form-field">
+                Email:
+                <input type="email" name="email" required>
+            </div>
+            
+            <div class="form-field">
+                Username:
+                <input type="text" name="user-name" required>
+            </div>
+                
+            <div class="form-field" >
+                Pasword: 
+                <input type="password" 
+                    name="pasword"  
+                    required
+                    minlength="5"
+                    maxlength="32"
+                >
+            </div>
+            <div class="form-field">
+                <label class="form-field">
+                    You a agree
+                    <select name="agree">
+                        <option value="yes">yes</option>
+                        <option value="no">no</option>
+                    </select>
+                </label>
+            </div>
+            <div class="form-field">
+                <input type="checkbox" name="terms" required>
+                <label>I agree terms and conditions</label>
+            </div>
+            <div class="form-field">
+                <button type="reset">reset</button>
+                <button>
+                    Sign up
+                </button>
+            </div>
+        </form>
     </div>
     <!-- footer-->
     <footer>

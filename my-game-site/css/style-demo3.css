@@ -18,6 +18,25 @@ h3.game-title {
     width: 64px;
 }
 
+#play-button {
+    fill: green;
+    stroke: antiquewhite;
+    font-size: 32px;
+    width: 32px;
+    cursor: pointer;
+    
+}
+
+#skip-button {
+    width: 48px;
+    cursor: pointer;
+}
+
+#stop-button {
+    width: 32px;
+    cursor: pointer;
+}
+
 .date-field {
     font-size: 32px;
     font-weight: bold;
