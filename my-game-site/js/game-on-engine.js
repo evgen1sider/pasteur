@@ -1,88 +1,42 @@
-// Examples
-
-var mejs = new MyEngineJS('my-game', {
-    
+document.addEventListener('DOMContentLoaded', function () {
+  var mejs = new MyEngineJS('my-game', {
     back: {
-        'auto_clear' : false
+      'auto_clear': false
     },
-
     main: {
-        'auto_clear' : true
+      'auto_clear': true
     }
-});
+  });
 
-
-
-mejs.create_scene('my_scene',function () {
-
-    var rect = mejs.create_node(this, {
-
-        
-        
-        
-        
-        // RECTANGLE //
-        type: 'circle',
-        // type: 'rectangle',
-        position: mejs.vector2(50, 50),
-        radius: 25,
-        // size: mejs.vector2(200, 100),
-        color: '#ffff00',
-        layer: 'main'
+  mejs.create_scene('my_scene', function () {
+    var circle = mejs.create_node(this, {
+      type: 'circle',
+      position: mejs.vector2(100, 100),
+      radius: 50,
+      color: '#ff0000',
+      layer: 'main'
     });
-    // // CIRCLE //
-    // var circle = mejs.create_node(this, {
-        
-    //     type: 'circle',
-    //     position: mejs.vector2(50, 50),
-    //     radius: 25,
-    //     //size: mejs.vector2(100, 100),
-    //     color: 'blue',
-    //     layer: 'main'
 
-    // })
-       
-        
-
-    
-    
-    // Визветься тоді коли буде загружена або перехід на сцену
     this.init = function () {
-        console.log('inited');
-
-        mejs.get_layer('back').draw_rect({
-            x: 10, y: 10,
-            width: 500, height: 300,
-            color: '#221111'
-        });
-        
-        
+      console.log('Scene initialized');
     };
-    // dt - delta time
+
     this.update = function (dt) {
-        //rect.move(mejs.vector2(1, 0))
-        
-        //mejs.view.move(mejs.vector2(-1, 1))
-        rect.radius += 0.01;
-        
-
-        
-
+      circle.radius += 0.5;
     };
-    
-    // ctx- context
 
     this.draw = function (ctx) {
-        rect.draw_box();
-        
-        
-
+      if (circle && typeof circle.draw === 'function') {
+        circle.draw();
+      } else {
+        console.error('Circle draw method not found');
+      }
     };
-    // покидання сцени
+
     this.exit = function () {
-        
+      console.log('Scene exited');
     };
+  });
+
+  mejs.start('my_scene');
 });
-
-
-mejs.start('my_scene');

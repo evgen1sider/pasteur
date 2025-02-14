@@ -5,8 +5,8 @@ function diffSubstract (date1, date2) {
 }
 
 let end_date = {
-    "full_year" : "2021",
-    "month" : "07",
+    "full_year" : "2025",
+    "month" : "02",
     "day" : "04",
     "hours" : "15",
     "minutes" : "08",
