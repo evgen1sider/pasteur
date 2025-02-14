@@ -14,82 +14,79 @@
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
 </head>
 <body>
-        <header>
-        <div class="dws-menu">
-            <ul class="dws-ul">
-                <li class="dws-li">
-                    <a href="../index.html">Головна</a>
+  <header>
+    <div class="dws-menu">
+      <ul class="dws-ul">
+          <li class="dws-li">
+            <a href="../index.html">Головна</a>
+          </li>
+          <li class="dws-li">
+            <a href="news.html">Новини</a>
+          </li>
+          <li class="dws-li">
+            <a href="games.html">Ігри</a>
+          </li>
+          <li class="dws-li">
+            <a href="sign-in.html">Ввійти</a>
+          </li>
 
-                </li>
-                <li class="dws-li">
-                    <a href="news.html">Новини</a>
-                </li>
-                <li class="dws-li">
-                    <a href="games.html">Ігри</a>
-
-                </li>
-                <li class="dws-li">
-                    <a href="sign-in.html">Ввійти</a>
-
-                </li>
-
-            </ul>
-        </div>
-    </header>
-    <!-- main content -->
-    <div class="main-container">
-        <div class="main-containe-block">
-            <h2>Зареєструватись</h2>
-        </div>
-        <form action="http://localhost:3000/api" method="post">
-            <div class="form-field">
-                <label for="email">Email:</label>
-                <input type="email" id="email" name="email" required placeholder="Enter your email">
-            </div>
-            
-            <div class="form-field">
-                <label for="username">Username:</label>
-                <input type="text" id="username" name="user-name" required placeholder="Enter your username">
-            </div>
-                
-            <div class="form-field">
-                <label for="password">Password:</label>
-                <input type="password" 
-                    id="password"
-                    name="password"  
-                    required
-                    minlength="5"
-                    maxlength="32"
-                    placeholder="Enter your password"
-                >
-            </div>
-            <div class="form-field">
-                <label class="form-field">
-                    You a agree
-                    <select name="agree">
-                        <option value="yes">yes</option>
-                        <option value="no">no</option>
-                    </select>
-                </label>
-            </div>
-            <div class="form-field">
-                <input type="checkbox" name="terms" required title="Agree to terms and conditions">
-                <label>I agree terms and conditions</label>
-            </div>
-            <div class="form-field">
-                <button type="reset">reset</button>
-                <button type="submit">
-                    Sign up
-                </button>
-            </div>
-        </form>
+      </ul>
     </div>
-    <!-- footer-->
-    <footer>
-        <div class="footer-container">
-            <h3 text-align="center">Copirat by evgen1sider</h3>
-        </div>
-    </footer>
+  </header>
+  <!-- main content -->
+  <main class="main-container">
+    <div class="main-containe-block">
+      <h2>Зареєструватись</h2>
+    </div>
+    <form action="http://localhost:3000/api" method="post">
+      <div class="form-field">
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="email" required placeholder="Enter your email">
+      </div>
+        
+      <div class="form-field">
+        <label for="username">Username:</label>
+        <input type="text" id="username" name="user-name" required placeholder="Enter your username">
+      </div>
+            
+      <div class="form-field">
+        <label for="password">Password:</label>
+        <input type="password" 
+          id="password"
+          name="password"  
+          required
+          minlength="5"
+          maxlength="32"
+          placeholder="Enter your password"
+        >
+      </div>
+      <div class="form-field">
+        <label class="form-field">
+          You a agree
+          <select name="agree">
+            <option value="yes">yes</option>
+            <option value="no">no</option>
+          </select>
+        </label>
+      </div>
+      <div class="form-field">
+        <input type="checkbox" name="terms" required title="Agree to terms and conditions">
+        <label>I agree terms and conditions</label>
+      </div>
+      <div class="form-field">
+        <button type="reset">reset</button>
+        <button type="submit">
+          Sign up 
+        </button>
+      </div>
+    </form>
+  </main>
+  <!-- footer-->
+  <footer>
+    <div class="footer-container">
+      <h3 text-align="center">Copirat by evgen1sider</h3>
+    </div>
+  </footer>
     
     
 </body>
