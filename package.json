@@ -1,0 +1,19 @@
+{
+  "name": "pasteur",
+  "version": "1.0.0",
+  "description": "game site where i push created of own game or generated wtis copilot or chat GPT",
+  "main": "main.js",
+  "scripts": {
+    "test": "test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/evgen1sider/pasteur.git"
+  },
+  "author": "evgen1sider",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/evgen1sider/pasteur/issues"
+  },
+  "homepage": "https://github.com/evgen1sider/pasteur#readme"
+}

@@ -53,19 +53,19 @@
         <form action="http://localhost:3000/api" method="post">
             <div class="form-field">
                 Username:
-                <input type="text" name="user-name" required>
+                <input type="text" name="user-name" title="Username" placeholder="Enter your username" required>
             </div>
                 
             <div class="form-field" >
                 Pasword: 
-                <input type="password" name="pasword" required>
+                <input type="password" name="pasword" title="Password" placeholder="Enter your password" required>
             </div>
             <div class="form-field">
-                <input type="checkbox" name="remember" id="rememberd">
+                <input type="checkbox" name="remember" id="rememberd" title="Remember Me">
                 <label>Remember Me</label>
             </div>
             <div class="form-field">
-                <button>
+                <button type="submit">
                     Sign in
                 </button>
             </div>
